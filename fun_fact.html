@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Number Facts</title>
+</head>
+
+<body>
+    <h1>Facts about Number 7</h1>
+    <ul id="numberFacts"></ul>
+    <button id="getFactButton">Get Facts</button>
+
+    <script>
+        // Function to make a request to the Numbers API and return a promise
+        function getNumberFact(number) {
+            const baseUrl = 'http://numbersapi.com/';
+            const jsonQuery = '?json';
+
+            return fetch(`${baseUrl}${number}${jsonQuery}`)
+                .then(response => response.json())
+                .then(data => data.text);
+        }
+
+        // Function to display four facts when the button is clicked
+        function displayFacts() {
+            const numberFactsContainer = document.getElementById('numberFacts');
+            numberFactsContainer.innerHTML = ''; // Clear previous facts
+
+            const promises = [];
+            for (let i = 0; i < 4; i++) { // Display 4 facts
+                promises.push(getNumberFact(7)); // Replace 7 with your favorite number
+            }
+
+            Promise.all(promises)
+                .then(facts => {
+                    facts.forEach(fact => {
+                        const factItem = document.createElement('li');
+                        factItem.textContent = fact;
+                        numberFactsContainer.appendChild(factItem);
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Add click event listener to the button
+        const getFactButton = document.getElementById('getFactButton');
+        getFactButton.addEventListener('click', displayFacts);
+    </script>
+</body>
+
+</html>
